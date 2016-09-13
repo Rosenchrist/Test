@@ -1,3 +1,6 @@
 # Test
-1st rep for testing smth
-this file was edited =)
+1st rep for testing smth\n
+This file was edited =)
+Foo(bar){
+ todo(smth);
+}
