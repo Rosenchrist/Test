@@ -1,0 +1,27 @@
+
+--1 запрос
+--Выберете всех пользователей, оплативших различные услуги в 2013 году более чем на 5000 рублей.
+SELECT nickname FROM users u
+RIGHT JOIN payment p
+ON (u.id = p.user_id)
+WHERE pay_date >= '2013-01-01' AND pay_date <= '2013-12-31'
+GROUP BY nickname HAVING sum(price)>5000;
+--2 запрос
+--Выберете наиболее востребованную услугу (по количеству обращений) в 2013 году. Таких услуг может быть несколько.
+
+SELECT servise_id FROM
+(SELECT servise_id, count(servise_id) AS count FROM payment
+WHERE pay_date >= '2013-01-01' AND pay_date <= '2013-12-31'
+GROUP BY servise_id) a
+WHERE count = 
+(SELECT count(servise_id) AS count FROM payment
+WHERE pay_date >= '2013-01-01' AND pay_date <= '2013-12-31'
+GROUP BY servise_id
+ORDER BY count DESC
+LIMIT 1);
+--3 запрос
+--Выберете информацию о пользователях, получивших письма (хотя бы одно) после своего последнего посещения сайта.
+SELECT nickname, sex, birthdate, city, country, e_mail, rating  from users where id in 
+(select m.to_id from messages m 
+inner join users u on (m.to_id = u.id)
+where m.sending_time > u.last_visit);
